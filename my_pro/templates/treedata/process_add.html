@@ -1,0 +1,180 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>dddd</title>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{%static 'bower_components/font-awesome/css/font-awesome.min.css'%}"/>
+    <link href="{%static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{%static 'dist/css/AdminLTE.min.css'%}">
+</head>
+<body>
+    <div class="container">
+        <input type="hidden" id='pro_id' name="pro_id" value="{{process_id}}">
+        <input type="hidden" id='node_type' name="node_type" value="{{node_type}}">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-success">
+                <div class="box-header">
+                    <h3 class="box-title">新增数据</h3>
+                    <div class="box-tools">
+
+                    </div>
+                </div>
+
+                <div class="box-body table-responsive no-padding">
+
+                    <ul class="todo-list">
+                        {%for data in fake_data%}
+                        <li>
+                          <!-- drag handle -->
+
+                          <!-- checkbox -->
+                          <input type="checkbox" value="{{data.id}}">
+                          <!-- todo text -->
+                          <span class="text">{{data.text}}</span>
+                          <!-- Emphasis label -->
+                          <small class="label label-danger"><i class="fa fa-user"></i>{{data.username}}</small>
+                          <!-- General tools such as edit or delete-->
+                          <div class="tools">
+                            <i class="fa fa-edit"></i>
+                            <i class="fa fa-trash-o"></i>
+                          </div>
+                        </li>
+                        {%endfor%}
+                      </ul>
+                </div>
+
+                <div class="box-footer clearfix no-border">
+                  <button type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> 添加数据</button>
+                </div>
+            </div>
+        </div>
+    <!--/endcol-->
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-info">
+            <div class="box-header">
+                <small class="box-title">已有数据</small>
+                <div class="box-tools">
+
+                </div>
+            </div>
+
+            <div class="box-body">
+                <div class='treedata'></div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script src="{%static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{%static 'bower_components/bootstrap/dist/js/bootstrap.min.js'%}"></script>
+<!-- AdminLTE App -->
+<script src="{%static 'dist/js/adminlte.min.js'%}"></script>
+<script src="{%static 'js/bootstrap-treeview.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/layer.js'%}"></script>
+    <script type="text/javascript">
+
+        var feature = {{feature_data|safe}};
+        var variation = {{variation_data|safe}};
+        var requirement = {{requirement_data|safe}};
+        var node_type = $('#node_type').val();
+        console.log(feature, variation, requirement, node_type);
+        if (node_type === 'product') $('.treedata').treeview({data: feature});
+        else if (node_type === 'variation') $('.treedata').treeview({data: variation});
+        else if (node_type === 'requirement') $('.treedata').treeview({data: requirement});
+
+        $('button').click(function(){
+            var pro_id = $('#pro_id').val()
+            layer.prompt({title: '输入数据', formType: 0}, function(text, index){
+                layer.close(index);
+                $.getJSON("{%url 'treedata:addData'%}", {'text': text, 'node_type':$('#node_type').val(), 'pro_id': pro_id}, function(results){
+                    $('.todo-list').empty()
+                    for (var i =0, length=results['data'].length; i<length; i++){
+                        console.log()
+                        $('.todo-list').append("<li><input type='checkbox' value="+results['data'][i].id+"><span class='text'>"+results['data'][i].text+"</span><small class='label label-danger'><i class='fa fa-user'></i>"+results['data'][i].username+"</small><div class='tools'><i class='fa fa-edit'></i><i class='fa fa-trash-o'></i></div></li>")
+                    }
+
+                })
+            });
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // $('#type').change(function () {
+        //     var type = $(this).val();
+        //     if(type==='mode' || type === 'cause' || type === 'effect'){
+        //         $.getJSON("{%url 'pfmea:data_list'%}", {'type':type,'pro_id':pro_id}, function (data) {
+        //             console.log(data['req'],data['modes']);
+        //             $('#reqSelect').show();
+        //             $("#listShow ").empty();
+        //             $("#content").empty();
+        //             data['req'].forEach(function (li, index) {
+        //                 $("#content").append("<option value='"+li['id']+"'>"+li['req']+"</option>")
+        //             });
+        //             $('#result').show();
+        //             data['modes'].forEach(function (li, index) {
+        //                 $("#listShow").append("<li>"+li+"</li>")
+        //             })
+        //         })
+        //     } else if(type === 'variation' || type === 'product' || type === 'require'){
+        //         $.getJSON("{%url 'pfmea:data_list'%}", {'type':type,'pro_id':pro_id}, function (data) {
+        //             $("#listShow ").empty();
+        //             $('#reqSelect').hide();
+        //             $('#result').show();
+        //             data['modes'].forEach(function (li, index) {
+        //                 $("#listShow").append("<li>"+li+"</li>")
+        //             })
+        //         })
+
+        //     }
+        // });
+
+
+        function submit() {
+            var treeData = null;
+            var text = $('#InputText').val();
+            var req = $('#content').val();
+            var type = $('#type').val();
+            $.ajax({
+                type:'POST',
+                async: false,//防止报错ConnectionAbortedError: [WinError 10053] 您的主机中的软件中止了一个已建立的连接
+                url:"{%url 'pfmea:treeData_add'%}",
+                data:JSON.stringify({'text': text, 'pro_id': pro_id, 'req': req, 'type':type}),
+                success:function (data) {
+                    alert(data['msg']);
+                    treeData = data['data'];
+                    parent.layer.closeAll();
+                },
+                error:function (data) {
+                    alert(data);
+                }
+             });
+            var info = {'text':text, 'treedata': treeData};
+            return info;
+        }
+
+
+
+    </script>
+</body>
+</html>

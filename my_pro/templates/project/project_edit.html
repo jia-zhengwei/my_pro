@@ -1,0 +1,235 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{%block menu%}
+
+      <div class="row">
+        <div class="col-md-3">
+
+          <!-- About Me Box -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">{{project.pro_name}}</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <strong><i class="fa fa-book margin-r-5"></i>Excel 文件</strong>
+
+              <p class="text-muted">
+                B.S. in Computer Science from the University of Tennessee at Knoxville
+              </p>
+
+              <hr>
+
+              <strong><i class="fa fa-calendar margin-r-5"></i> 创建时间</strong>
+
+              <p class="text-muted">{{project.create_time}}</p>
+
+              <hr>
+
+              <strong><i class="fa fa-group margin-r-5"></i> 参与用户组</strong>
+
+              <p>
+                {%for group in groups%}
+
+                <span class="label label-success">{{group.group_name}}</span>
+                {%endfor%}
+              </p>
+
+              <hr>
+
+              <strong><i class="fa fa-file-text-o margin-r-5"></i> 描述</strong>
+
+              <p>{{project.descripe}}</p>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#activity" data-toggle="tab">文件下载</a></li>
+              <li><a href="#timeline" data-toggle="tab">上传时间树</a></li>
+              <li><a href="#settings" data-toggle="tab">编辑</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="active tab-pane" id="activity">
+
+              </div>
+              <!-- /.tab-pane -->
+              <div class="tab-pane" id="timeline">
+                <!-- The timeline -->
+                <ul class="timeline timeline-inverse">
+                  <!-- timeline time label -->
+                  <li class="time-label">
+                        <span class="bg-red">
+                          10 Feb. 2014
+                        </span>
+                  </li>
+                  <!-- /.timeline-label -->
+                  <!-- timeline item -->
+                  <li>
+                    <i class="fa fa-envelope bg-blue"></i>
+
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+
+                      <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+
+                      <div class="timeline-body">
+                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
+                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+                        quora plaxo ideeli hulu weebly balihoo...
+                      </div>
+                      <div class="timeline-footer">
+                        <a class="btn btn-primary btn-xs">Read more</a>
+                        <a class="btn btn-danger btn-xs">Delete</a>
+                      </div>
+                    </div>
+                  </li>
+                  <!-- END timeline item -->
+                  <!-- timeline item -->
+                  <li>
+                    <i class="fa fa-user bg-aqua"></i>
+
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
+
+                      <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
+                      </h3>
+                    </div>
+                  </li>
+                  <!-- END timeline item -->
+                  <!-- timeline item -->
+                  <li>
+                    <i class="fa fa-comments bg-yellow"></i>
+
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
+
+                      <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+
+                      <div class="timeline-body">
+                        Take me to your leader!
+                        Switzerland is small and neutral!
+                        We are more like Germany, ambitious and misunderstood!
+                      </div>
+                      <div class="timeline-footer">
+                        <a class="btn btn-warning btn-flat btn-xs">View comment</a>
+                      </div>
+                    </div>
+                  </li>
+                  <!-- END timeline item -->
+                  <!-- timeline time label -->
+                  <li class="time-label">
+                        <span class="bg-green">
+                          3 Jan. 2014
+                        </span>
+                  </li>
+                  <!-- /.timeline-label -->
+                  <!-- timeline item -->
+                  <li>
+                    <i class="fa fa-camera bg-purple"></i>
+
+                    <div class="timeline-item">
+                      <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
+
+                      <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
+
+                      <div class="timeline-body">
+                        <img src="http://placehold.it/150x100" alt="..." class="margin">
+                        <img src="http://placehold.it/150x100" alt="..." class="margin">
+                        <img src="http://placehold.it/150x100" alt="..." class="margin">
+                        <img src="http://placehold.it/150x100" alt="..." class="margin">
+                      </div>
+                    </div>
+                  </li>
+                  <!-- END timeline item -->
+                  <li>
+                    <i class="fa fa-clock-o bg-gray"></i>
+                  </li>
+                </ul>
+              </div>
+              <!-- /.tab-pane -->
+
+              <div class="tab-pane" id="settings">
+                <form class="form-horizontal" action="{%url 'project:edit_project' project.id%}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="pro_name" class="col-sm-2 control-label">项目名称</label>
+                  <div class="col-sm-10">
+                    <input  class="form-control" value="{{project.pro_name}}" name="pro_name" placeholder="项目名称">
+                    <input type="hidden" name="pro_id" value="{{project.id}}">
+                  </div>
+                </div>
+                <div class="form-group">
+                    <label for="select2" class="col-sm-2 control-label">项目组</label>
+                    <div class="col-sm-10">
+                        <select class="form-control select2" name="select2" multiple="multiple" data-placeholder="Select a State" style="width: 100%;">
+                          {%for group in groups_all%}
+                          {%if group in groups%}
+                          <option value="{{group.id}}" selected="selected">{{group.group_name}}</option>
+                          {%else%}
+                          <option value="{{group.id}}">{{group.group_name}}</option>
+                          {%endif%}
+                          {%endfor%}
+                        </select>
+                    </div>
+                   </div>
+                <div class="form-group">
+                  <label for="descripe" class="col-sm-2 control-label">项目描述</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" name='pro_descripe' rows="3" placeholder="Enter ..." >{{project.descripe}}</textarea>
+                  </div>
+                </div>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button type="submit" id='pro_btn' class="btn btn-info pull-right">提交</button>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+
+              </div>
+              <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+          </div>
+          <!-- /.nav-tabs-custom -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+{%endblock%}
+{%block js%}
+<script src="{%static 'bower_components/select2/dist/js/select2.full.min.js'%}"></script>
+<script type="text/javascript">
+
+  $(function () {
+        $('.select2').select2()
+    })
+
+  $('#pro_select').change(function(){
+      $('#doc_list').empty();
+      $.ajax({
+        url:"{%url 'project:get_document'%}",
+        type:'GET',
+        data: {'pro_id':$('#pro_select').val()},
+        success:function(result){
+          console.log(result, result['docs'].length)
+          for (var i=0; i< result['docs'].length; i++){
+            $('#doc_list').append(
+            "<li><span class='mailbox-attachment-icon'><i class='fa fa-file-pdf-o'></i></span><div class='mailbox-attachment-info'><i class='fa fa-paperclip'></i>"+result['docs'][i]['filename']+"</div></li>"
+            )
+          }
+        }
+      })
+    })
+
+</script>
+
+
+{%endblock%}

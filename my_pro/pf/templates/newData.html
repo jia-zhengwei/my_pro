@@ -1,0 +1,39 @@
+{%extends 'newDataBase.html'%}
+{%block content%}
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<form class="form-horizontal" role="form" method="post">
+                {% csrf_token %}
+				<div class="form-group" id="group-fir">
+					 <label for="process_code" >过程编号
+
+					<input type="text" class="form-control" placeholder="例：FF-01-02" id="process_code" /></label>
+                     <label for="process" >过程名称
+                        <input type="text" class="form-control" placeholder="例：调运发动机" id="process" /></label>
+                        <label for="flow">流程
+                            <select class="selectpicker show-tick form-control" id="flow">
+                                <option value="搬运">搬运</option>
+                                <option value="储存">储存</option>
+                                <option value="检验">检验</option>
+                                <option value="加工">加工</option>
+                            </select>
+                        </label>
+                        <button type="button" id="btn-pro" class="btn btn-default success">确认</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-6 column" id="tree">
+		</div>
+	</div>
+</div>
+{%endblock%}
+{%block js%}
+<script type="text/javascript">
+    var node = [];
+</script>
+<script type="text/javascript" src="/static/js/createNode.js"></script>
+
+{%endblock%}

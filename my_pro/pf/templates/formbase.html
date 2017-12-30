@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{%block title%}{%endblock%}</title>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    {%block css%}{%endblock%}
+</head>
+<body  style="background-color: white;">
+{%block body%}{%endblock%}
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/bootstrap-filestyle.js"></script>
+    <script src="/static/js/csrf.js"></script>
+    {%block js%}{%endblock%}
+</body>
+</html>

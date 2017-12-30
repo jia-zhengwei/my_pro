@@ -1,0 +1,147 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{%block menu%}
+<div class="row">
+    <div class="col-md-3">
+        {%for project in projects%}
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title text-blue">{{project.pro_name}}</h3>
+                <div class="box-tools">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body no-padding">
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="#"><i class="fa fa-group"></i> 项目组
+                        <span class="label label-primary pull-right">{{project.groups|length}}</span></a>
+                    </li>
+                    <li><a href="#"><i class="fa fa-user"></i> 成员</a>
+                        <span class="label label-primary pull-right"></span>
+                    </li>
+                    <li><a href="#"><i class="fa fa-file-text-o"></i> 文件
+                        <span class="label label-primary pull-right">{{project.documents|length}}</span></a>
+                    </li>
+                    <li><a href="#"><i class="fa fa-trash-o"></i> 删除</a></li>
+                </ul>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        {%endfor%}
+
+
+        <!-- /. box -->
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">注意事项</h3>
+
+                <div class="box-tools">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body no-padding">
+                <ul class="nav nav-pills nav-stacked">
+                    <li style="margin: 10px"><i class="fa fa-circle-o text-red"></i> 导入的excel表格内请不要有图片</li>
+                    <li style="margin: 10px"><i class="fa fa-circle-o text-yellow"></i> 首先导入过程流程excel</li>
+                    <li style="margin: 10px"><i class="fa fa-circle-o text-light-blue"></i> excel表格请按照规定格式</li>
+                </ul>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-cloud-upload"></i>上传文件</h3>
+            </div>
+            <!-- /.box-header -->
+            <form class="form-horizontal " action="{%url 'project:upload_file'%}" method="POST"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="col-md-9">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="type" class="col-md-2 control-label">选择文件</label>
+                        <div class="col-md-9">
+                            <select class="form-control select2" name="type" data-placeholder="选择文件"
+                                    style="width: 100%;">
+                                <option value="">--选择文件--</option>
+                                <option value="process">过程流程</option>
+                                <option value="failure">失效模式</option>
+                                <option value="control">控制计划</option>
+                                <option value="special">特殊清单</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="select2" class="col-md-2 control-label">选择项目</label>
+                        <div class="col-md-9">
+                            <select class="form-control select2" id='pro_select' name="select2" data-placeholder="选择项目"
+                                    style="width: 100%;">
+                                <option value="">--选择项目--</option>
+                                {%for project in projects%}
+                                <option value="{{project.id}}">{{project.pro_name}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="select2" class="col-md-2 control-label">文件描述</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" name='doc_descripe' rows="3"
+                                      placeholder="Enter ..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="select2" class="col-md-2 control-label">上传文件</label>
+                        <div class="col-md-5">
+                            <input type="file" id="file" name="file" class="filestyle" id="InputFile"/>
+
+                        </div>
+                        <button type="submit" id='pro_btn' onclick="return check();" class="btn btn-success">上传</button>
+                    </div>
+                </div>
+
+
+                <!-- /.box-body -->
+            </form>
+
+
+            <!-- /.box-footer -->
+            <div class="box-footer">
+                <ul class="mailbox-attachments clearfix" id="doc_list">
+
+
+                </ul>
+            </div>
+            <!-- /.box-footer -->
+
+        </div>
+    </div>
+    <!-- /. box -->
+</div>
+<!-- /.col -->
+<!-- /.row -->
+{%endblock%}
+{%block js%}
+<script type="text/javascript" src="{%static 'js/bootstrap-filestyle.js'%}"></script>
+<script type="text/javascript">
+    function check(){
+        var project = $('#pro_select').val()
+        if (!project) {
+            alert('请选择项目，或者新建项目');
+            return false;
+        }else {
+            return true;
+        }
+    }
+</script>
+{%endblock%}

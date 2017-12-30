@@ -1,0 +1,201 @@
+{%extends 'index.html'%}
+{% load staticfiles %}
+{%block menu%}
+<div class="row">
+    {%for group in groups%}
+    <div class="col-md-4">
+        <!-- Widget: user widget style 1 -->
+        <div class="box box-widget widget-user-2">
+            <!-- Add the bg color to the header using any of the bg-* classes -->
+            <div class="widget-user-header bg-blue">
+                <div class="widget-user-image">
+                    <img class="img-circle" src="{%static 'dist/img/user7-128x128.jpg'%}" alt="User Avatar">
+                </div>
+                <!-- /.widget-user-image -->
+                <h3 class="widget-user-username">{{group.group_name}}</h3>
+                <h5 class="widget-user-desc">{{group.descripe}}</h5>
+            </div>
+            <div class="box-footer no-padding">
+                <ul class="nav nav-stacked">
+                    <li><a href="#">项目 <span class="pull-right badge bg-blue">31</span></a></li>
+                    <li><a href="#">任务 <span class="pull-right badge bg-aqua">5</span></a></li>
+                    <li><a href="#">结束的项目 <span class="pull-right badge bg-green">12</span></a></li>
+                    <li><a href="{%url 'common:group_user' group.id%}">用户组成员 <span class="pull-right badge bg-red">
+                        {{group.users|length}}</span></a></li>
+                    <li><a href="#">
+                        <mybtn_new>新增成员<span class="pull-right badge bg-blue">+</span>
+                        </mybtn_new>
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /.widget-user -->
+    </div>
+     {%endfor%}
+</div>
+
+
+    <div class="row">
+        <div class="col-md-4">
+            <addGroup>
+                <!-- Widget: user widget style 1 -->
+                <div class="box box-widget widget-user-2">
+                    <!-- Add the bg color to the header using any of the bg-* classes -->
+                    <div class="widget-user-header bg-blue">
+                        <div class="widget-user-image">
+                            <img class="img-circle" src="{%static 'dist/img/add.jpg'%}" alt="User Avatar">
+                        </div>
+                        <!-- /.widget-user-image -->
+                        <h3 class="widget-user-username">新增用户分组 </h3>
+                        <h5 class="widget-user-desc">add NEW</h5>
+                    </div>
+                </div>
+            </addGroup>
+            <!-- /.widget-user -->
+        </div>
+
+        <div class="col-xs-6" id='add_user' style="display: none;">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">新增成员</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button"  class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
+                        <button type="button" id="group_user" class="btn btn-box-tool" ><i class="fa fa-remove"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" action="{%url 'common:group_add_user' %}" method="POST"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="pro_name" class="col-sm-2 control-label">成员名</label>
+                            <div class="col-sm-10">
+                                <select class="form-control select2" name="user_id" multiple="multiple"
+                                        data-placeholder="成员名" style="width: 100%;">
+                                    {%for user in users%}
+                                    <option value="{{user.id}}">{{user.username}}</option>
+                                    {%endfor%}
+                                </select>
+                                <!--<input class="form-control" name="pro_name" placeholder="用户名">-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="..." class="col-sm-2 control-label">成员分组</label>
+                            <div class="col-sm-10">
+                                <select class="" name="group_id" multiple="multiple"
+                                        data-placeholder="成员分组" style="width: 100%;">
+                                    {%for group in group_list%}
+                                    <option value="{{group.id}}">{{group.group_name}}</option>
+                                    {%endfor%}
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-info pull-right">提交</button>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+        </div>
+        <!--/添加项目div结束-->
+    </div>
+
+<div class="row">
+<div class="col-xs-6" id='add_group' style="display: none;">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">新增用户分组</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                        class="fa fa-minus"></i></button>
+                <button type="button" id="add_group_close" class="btn btn-box-tool" ><i class="fa fa-remove"></i>
+                </button>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form class="form-horizontal" action="{%url 'common:group_add' %}" method="POST"
+              enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="pro_name" class="col-sm-2 control-label">组名</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" name="pro_name" placeholder="组名">
+                        <!---->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="descripe" class="col-sm-2 control-label">组名描述</label>
+                    <div class="col-sm-10">
+                                <textarea class="form-control" name='pro_descripe' rows="3"
+                                          placeholder="Enter ..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <button type="submit" id='pro_btn' class="btn btn-info pull-right">提交</button>
+            </div>
+            <!-- /.box-footer -->
+        </form>
+    </div>
+</div>
+<!--/添加项目div结束-->
+<<<<<<< HEAD
+=======
+</div>
+>>>>>>> c757b17e751f17abcf5705b5b43e7d55072c9f2e
+
+{%endblock%}
+{%block js%}
+<script src="{%static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{%static 'bower_components/select2/dist/js/select2.full.min.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/bootstrap-filestyle.js'%}"></script>
+<script src="/static/js/jquery.js"></script>
+<script src="/static/js/layer.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(function () {
+        $('.select2').select2()
+    });
+
+        $('mybtn_new').click(function () {
+//            $('#pro_list').attr('class', 'col-xs-6');
+//            $('#my-box-widget').boxWidget('toggle')
+            $('#add_user').show();
+//            window.location.reload();
+        });
+
+        $('#group_user').click(function () {
+            $('#add_user').hide();
+        });
+
+
+        $('addGroup').click(function () {
+//            $('#pro_list').attr('class', 'col-xs-6');
+            $('#add_group').show();
+//            window.location.reload();
+        });
+        $('#add_group_close').click(function () {
+            $('#add_group').hide();
+        });
+
+//        $('.close-it').on('click',function(event) {
+//    $(this).parents('.overlay').fadeOut(200,function(){
+//        $(this).removeAttr('style');
+//    });
+//});
+    });
+
+
+</script>
+{%endblock%}

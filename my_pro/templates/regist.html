@@ -1,0 +1,207 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Tell the browser to be responsive to screen width -->
+    <link rel="stylesheet" href="{%static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{%static 'bower_components/font-awesome/css/font-awesome.min.css'%}"/>
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="{%static 'bower_components/Ionicons/css/ionicons.min.css'%}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{%static 'bower_components/select2/dist/css/select2.min.css'%}">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{%static 'dist/css/AdminLTE.min.css'%}">
+    <link rel="stylesheet" href="{%static 'dist/css/skins/skin-blue.min.css'%}">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{%static 'plugins/iCheck/square/blue.css'%}"/>
+
+</head>
+
+
+{% block content%}
+<body class="hold-transition register-page">
+<div class="register-box">
+    <div class="register-logo">
+        <a href="../../index2.html"><b>LOGO</b></a>
+    </div>
+
+    <div class="register-box-body">
+        <p class="login-box-msg">注册账号</p>
+
+        <form action="{%url 'common:toRegist'%}" method="post" novalidate="novalidate">
+            {% csrf_token %}
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" placeholder="姓名" id="form_username"  />
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="email" name="email" class="form-control" id="form-email" placeholder="邮箱"
+                       onfocus="check_name()" onblur="check_email()"/>
+                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="password" name="password" class="form-control" id="form-password" placeholder="密码"
+                       onblur="check_password()"/>
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="password" class="form-control" id="form-password-again" placeholder="确认密码"
+                       onblur="check_password_again()"/>
+                <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+            </div>
+            <!-- <div class="form-group has-feedback">
+
+                <select class="form-control select2"  id="company-id" name="select2" multiple="multiple"
+                        data-placeholder="选择公司" style="width: 100%;">
+                    {%for company in companys%}
+                    <option value="{{company.id}}">{{company.company_name}}</option>
+                    <span class=""></span>
+                    {%endfor%}
+                </select>
+            </div> -->
+            <div class="row">
+                <!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="submit" onclick="" class="regist_btn btn btn-primary btn-block btn-flat">注册</button>
+                </div>
+                <!-- /.col -->
+                <!-- /.col -->
+                <div class="col-xs-4">
+                </div>
+                <div class="col-xs-4">
+                    <a href="" type="..." class="btn btn-primary btn-block btn-flat"> 忘记密码</a>
+                </div>
+                <!-- /.col -->
+            </div>
+        </form>
+        <a href="{%url 'common:login'%}" class="text-center">已经有账号登录</a>
+    </div>
+    <!-- /.form-box -->
+</div>
+<!-- /.register-box -->
+</body>
+{% endblock %}
+{% block js %}
+<script src="{% static 'assets/js/scripts.js'%}"></script>
+<script src="{%static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{%static 'plugins/iCheck/icheck.min.js'%}"></script>
+<script src="{% static 'assets/js/jquery.backstretch.min.js'%}"></script>
+<!--<script src="{%static 'dist/js/adminlte.min.js'%}"></script>-->
+<script src="{%static 'bower_components/select2/dist/js/select2.full.min.js'%}"></script>
+<script type="text/javascript">
+    function check_name() {
+        var user_name = document.getElementById("form_username").value;
+        if (user_name=='') {
+            alert("请填入用户名");
+        }
+    }
+
+    function check_email() {
+        var email = document.getElementById('form-email').value;
+        function isEmail(str) {
+            var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            return reg.test(str);
+        }
+        if (isEmail(email) =='') {
+            alert("请填入正确的邮箱");
+        }
+    }
+
+    function check_password() {
+        var password = document.getElementById('form-password').value;
+        if (password == '') {
+            alert("请填入密码");
+        }
+        if (password.length < 8) {
+            alert("为保证您的安全，密码必须大于或等于8位");
+        }
+    }
+
+    function check_password_again() {
+        var password_again = document.getElementById('form-password-again').value;
+        var password = document.getElementById('form-password').value;
+        if (password != password_again) {
+            alert("两次输入密码不相同，请重新输入");
+        }
+    }
+
+    $(document).ready(function () {
+        $(function () {
+            $('.select2').select2()
+        });
+
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+        });
+
+
+        // $("button").click(function () {
+        //     var emailValue = $('#form-email').val();
+        //     var username = $('#form-username').val();
+        //     var email = $('#form-email').val();
+        //     var password = $("#form-password").val();
+        //     var password_again = $("#form-password-again").val();
+
+        //     function isEmail(str) {
+        //         var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        //         return reg.test(str);
+        //     }
+
+
+        //     if (!isEmail(emailValue)) {
+        //         alert("您输入的邮箱有误,请重新核对后再输入!");
+        //         document.getElementById_r("email").focus();
+        //         return false;
+        //     }else{
+        //         return true;
+        //     }
+
+
+        //     if (!username == null || username == undefined || username == '')
+        //         alert("用户名不能为空");
+        //     else {
+        //         if (email == null || email == undefined || email == '')
+        //             alert("邮箱不能为空");
+        //         else {
+        //             checkEmail();
+        //             if (password == null || password == undefined || password == '')
+        //                 alert("密码不能为空");
+        //             else {
+        //                 if (password != password_again)
+        //                     alert("两次输入密码不相同，请重新输入");
+        //                 else {
+        //                     if (company_id == null || company_id == undefined || company_id == '')
+        //                         alert("请选择公司");
+        //                     else {
+        //                         $.ajax({
+        //                             type: "POST",
+        //                             url: "{%url 'common:toRegist'%}",
+        //                             data: {
+        //                                 'username': username,
+        //                                 'email': email,
+        //                                 'password': password,
+        //                                 'company_id': company_id[0]
+        //                             },
+        //                             success: function (data) {
+        //                                 if (data == "注册成功")
+        //                                     location.href = "{%url 'common:index'%}"
+        //                             },
+        //                             error: function (data) {
+        //                                 alert(data)
+        //                             }
+        //                         });
+        //                     }
+
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return false
+        // })
+    })
+</script>
+{% endblock %}

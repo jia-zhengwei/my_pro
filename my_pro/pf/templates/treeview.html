@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>tree_view</title>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/tether.min.css"/>
+    <link rel="stylesheet" href="/static/css/click-right.css"/>
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css"/>
+</head>
+<body>
+<div class="container">
+    <div class="row clearfix" style="margin: 20px;">
+	<a class="btn btn-sm btn-success" href="{%url 'pfmea:index'%}">首页</a>
+    <a class="btn btn-sm btn-success" href="{%url 'pfmea:logout'%}">登出</a>
+    </div>
+    <div class="row clearfix" style="margin-top: 20px;">
+        <input type="hidden" value="1223" id="testInput">
+        <div class="col-md-4 column" id="tree">
+
+        </div>
+        <div class="col-md-8 column" id="treeview">
+
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/csrf.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-treeview.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/node.js"></script>
+<script type="text/javascript" src="/static/js/layer.js"></script>
+<script type="text/javascript" src="/static/js/tether.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.context-menu.js"></script>
+    <script type="text/javascript">
+
+        /**
+         *ajax提交表单时，需要验证csrf
+         */
+        $.ajaxSetup({
+          data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+        });
+
+        function gettree(){
+          var data ={{json_data|safe}};
+          console.log(data);
+          return data;
+        }
+
+
+
+        /**
+         * 初始化树，选择节点后，在右边展现所选节点
+         */
+        tree =$('#tree').treeview({
+            data: gettree(),
+            expandIcon:"glyphicon glyphicon-list-alt",
+            showTags: true,
+            onNodeSelected: function (event, data) {
+                var node = $('#tree').treeview('getNode', data.nodeId);
+                node['state'] = {
+                    checked: true,
+                    disabled: false,
+                    expanded: true,
+                    selected: true
+                };
+                var json_data= [];
+                json_data[0] = node;
+                console.log(json_data, typeof(node));
+                $('#treeview').treeview({
+                    data: json_data,
+                    showTags: true
+                });
+            }
+        });
+
+
+
+    </script>
+
+
+</body>
+</html>
+
+
+

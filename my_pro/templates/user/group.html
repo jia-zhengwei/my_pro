@@ -1,0 +1,51 @@
+{%extends 'index.html'%}
+{% load staticfiles %}
+{%block header%}
+
+    <h1>
+        用户组
+
+            <a class="btn" href="{%url 'common:group_add'%}">
+            <i class="fa fa-plus-circle"></i> 新增
+            </a>
+
+    </h1>
+
+    <!-- <div class="input-group col-md-3">
+        <input class="form-control" id="group-text" placeholder="新建分组">
+        <div class="input-group-btn">
+          <button type="button" id="group-btn" class="btn btn-success"><i class="fa fa-plus"></i></button>
+        </div>
+    </div> -->
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
+        <li class="active">Here</li>
+    </ol>
+{%endblock%}
+{%block menu%}
+<div class="row">
+    {%for group in groups%}
+        <div class="col-md-3">
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                  <img class="profile-user-img img-responsive img-circle" src="{%static 'dist/img/user4-128x128.jpg'%}" alt="User profile picture">
+
+                  <h3 class="profile-username text-center">{{group.name}}</h3>
+
+                  <p class="text-muted text-center">Software Engineer</p>
+                  <ul class="nav nav-stacked">
+                    <li><a href="#">组员: <span class="pull-right badge bg-blue">{{group.user_set.all|length}}</span></a></li>
+                    <li><a href="#">Tasks <span class="pull-right badge bg-aqua">5</span></a></li>
+                    <li><a href="#">Completed Projects <span class="pull-right badge bg-green">12</span></a></li>
+                  </ul>
+                   <a href="#" class="btn btn-danger btn-sm"><b>删除</b></a>
+                    <a href="#" class="btn btn-primary btn-sm pull-right"><b>权限</b></a>
+                </div>
+            <!-- /.box-body -->
+          </div>
+
+        </div>
+    {%endfor%}
+</div>
+{%endblock%}
+

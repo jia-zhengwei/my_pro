@@ -1,0 +1,198 @@
+{%extends 'index.html'%}
+{% load staticfiles %}
+{%block css%}
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+     folder instead of downloading all of them to reduce the load. -->
+<!--<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">-->
+<!-- Google Font -->
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+{% endblock %}
+{%block menu%}
+<!-- Content Wrapper. Contains page content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">{{group.group_name}}</h3>
+                    <li class="box-title"><a href="#">
+                        <user_add> 新增成员<span class="pull-left badge bg-blue">+</span></user_add>
+                    </a></li>
+                    <li class="box-title"><a href="#">
+                        <user_del> 删除成员<span class="pull-left badge bg-red">-</span></user_del>
+                    </a></li>
+                    <div class="box-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input type="text" name="table_search" class="form-control pull-right"
+                                   placeholder="Search">
+
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                {%if group_users|length > 0%}
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>ID</th>
+                            <th>姓名</th>
+                            <th>Date</th>
+                            <th>职位</th>
+                            <th>Reason</th>
+                        </tr>
+                        {%for group_user in group_users%}
+                        <tr>
+                            <td>183</td>
+                            <td>{{group_user.username}}</td>
+                            <td>11-7-2014</td>
+                            <td><span class="label label-success">Approved</span></td>
+                            <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                        </tr>
+                        {%endfor%}
+                        <!--<tr>-->
+                            <!--<th><i class="box-title"><a href="#"><user_add> 新增成员<span class="pull-left badge bg-blue">+</span></user_add>-->
+                            <!--</a></i></th>-->
+                        <!--</tr>-->
+                    </table>
+                </div>
+                {%else%}
+                    <ul>
+                    <!-- drag handle -->
+                      <span class="handle">
+                            <i class="fa fa-ellipsis-v"></i>
+                            <i class="fa fa-ellipsis-v"></i>
+                          </span>
+                      <!-- checkbox -->
+                      <input type="checkbox" value="">
+                      <!-- todo text -->
+                      <span class="text">暂无成员</span>
+
+
+                    </ul>
+                {%endif%}
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+</section>
+
+<!--新增成员-->
+    <div class="col-xs-6" id='add_user' style="display: none;">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">新增成员</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                            class="fa fa-minus"></i></button>
+                    <button type="button" id="add_user_close" class="btn btn-box-tool"><i class="fa fa-remove"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form class="form-horizontal" action="{%url 'common:add_group_user' group.id%}" method="POST"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="pro_name" class="col-sm-2 control-label">选择成员</label>
+                        <div class="col-sm-10">
+                            <select class="form-control select2" name="company_user_id" multiple="multiple"
+                                    data-placeholder="选择成员" style="width: 100%;">
+                                {%for company_user in company_users%}
+                                <option value="{{company_user.id}}">{{company_user.username}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-info pull-right">提交</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </div>
+<!--./新增成员-->
+<!--删除成员-->
+   <div class="col-xs-6" id='del_user' style="display: none;">
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">删除成员</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                            class="fa fa-minus"></i></button>
+                    <button type="button" id="del_user_close" class="btn btn-box-tool"><i class="fa fa-remove"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form class="form-horizontal" action="{%url 'common:del_group_user' group.id%}" method="POST"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="pro_name" class="col-sm-2 control-label">选择成员</label>
+                        <div class="col-sm-10">
+                            <select class="form-control select2" name="user_id" multiple="multiple"
+                                    data-placeholder="选择成员" style="width: 100%;">
+                               {%for group_user in group_users%}
+                                <option value="{{group_user.id}}">{{group_user.username}}</option>
+                                {%endfor%}
+                            </select>
+                            <!--<input class="form-control" name="pro_name" placeholder="用户名">-->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-info pull-right">提交</button>
+                </div>
+                <!-- /.box-footer -->
+            </form>
+        </div>
+    </div>
+<!--. /删除成员-->
+{% endblock %}
+{%block js%}
+
+<script src="{%static 'bower_components/select2/dist/js/select2.full.min.js'%}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(function () {
+        $('.select2').select2()
+    });
+
+        $('user_add').click(function () {
+            $('#add_user').show();
+        });
+
+        $('#add_user_close').click(function () {
+            $('#add_user').hide();
+        });
+
+        $('user_del').click(function () {
+            $('#del_user').show();
+
+        });
+
+        $('#del_user_close').click(function () {
+            $('#del_user').hide();
+        });
+
+    });
+
+</script>
+{%endblock%}
+
+
+

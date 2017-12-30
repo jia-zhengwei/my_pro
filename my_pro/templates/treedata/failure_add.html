@@ -1,0 +1,239 @@
+{% extends 'layerbase.html' %}
+{% load staticfiles %}
+{%block content%}
+<div class="container">
+<input type="hidden" value="{{node_tag}}" class="node_tag">
+    <div class="row">
+        <div class="col-md-12">
+          <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#activity" data-toggle="tab">失效模式</a></li>
+              <li><a href="#timeline" data-toggle="tab">失效分析</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="active tab-pane" id="activity">
+                  <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box box-success">
+                            <div class="box-header">
+                                <h3 class="box-title">新增数据</h3>
+                                <div class="box-tools">
+
+                                </div>
+                            </div>
+
+                            <div class="box-body table-responsive no-padding">
+
+                                <ul class="new-list todo-list">
+
+                                </ul>
+                            </div>
+
+                            <div class="box-footer clearfix no-border">
+                              <button type="button" id='add-btn' class="btn btn-default pull-right"><i class="fa fa-plus"></i> 添加数据</button>
+                            </div>
+                        </div>
+                    </div>
+                <!--/endcol-->
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box box-info">
+                        <div class="box-header">
+                            <small class="box-title">已有数据</small>
+                            <div class="box-tools">
+
+                            </div>
+                        </div>
+
+                        <div class="box-body">
+                            <div class='failure_tree'></div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+              </div>
+              <!-- /.tab-pane -->
+              <div class="tab-pane" id="timeline">
+                <form class="form-horizontal" action="" method="POST" >
+                  <div class="form-group">
+                    <label for="select2" class="col-sm-2 control-label">失效模式</label>
+
+                    <div class="col-sm-10">
+                      <select class="form-control mode-select"  placeholder="选择失效模式" style="width: 100%;">
+
+                        </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputEmail" class="col-sm-2 control-label">严重度（S）</label>
+
+                    <div class="col-sm-10">
+                      <select class="form-control s-select" name="select2" placeholder="严重度" style="width: 100%;">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputName" class="col-sm-2 control-label">失效原因</label>
+
+                    <div class="col-sm-10">
+                      <div class="input-group">
+                        <input id='cause-input' class="form-control" placeholder="添加失效原因...">
+
+                        <div class="input-group-btn">
+                          <button type="button" class="cause-btn btn btn-success"><i class="fa fa-plus"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputSkills" class="col-sm-2 control-label">失效影响</label>
+                    <div class="col-sm-10">
+                      <div class="input-group">
+                        <input id='effect-input' class="form-control" placeholder="添加失效影响...">
+
+                        <div class="input-group-btn">
+                          <button type="button" class="effect-btn btn btn-success"><i class="fa fa-plus"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                      <div class="row">
+                        <div class="col-xs-6">
+                            <div class="box box-info">
+                            <div class="box-header">
+                                <small class="box-title">失效原因</small>
+                                <div class="box-tools">
+
+                                </div>
+                            </div>
+
+                            <div class="box-body">
+                              <ul class="todo-list cause-list">
+
+                              </ul>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="box box-info">
+                            <div class="box-header">
+                                <small class="box-title">失效影响</small>
+                                <div class="box-tools">
+
+                                </div>
+                            </div>
+
+                            <div class="box-body">
+                              <ul class="todo-list effect-list">
+
+                              </ul>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button id="save-btn" type="button" class="btn btn-danger">保存</button>
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+              <!-- /.tab-pane -->
+
+
+              <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+          </div>
+          <!-- /.nav-tabs-custom -->
+        </div>
+        <!-- /.col -->
+    </div>
+</div>
+{%endblock%}
+{%block css%}
+
+
+{%endblock%}
+{%block js%}
+<!-- <script src="{%static 'bower_components/select2/dist/js/select2.full.min.js'%}"></script> -->
+  <script type="text/javascript">
+    var failure_modes = [];
+    var failures = {{failure_nodes|safe}};
+    var node_id = {{node_id|safe}};
+    var node_tag = $('.node_tag').val();
+    $('.failure_tree').treeview({data:failures});
+
+    $('#add-btn').click(function(){
+            layer.prompt({title: '输入数据', formType: 0}, function(text, index){
+                layer.close(index);
+                $('.new-list').append("<li><span class='text'>"+text+"</span><div class='tools'><i class='fa fa-edit'></i><i class='fa fa-trash-o'></i></div></li>")
+
+                $('.mode-select').append("<option value="+text+">"+text+"</option>");
+
+            });
+        })
+
+    $('.cause-btn').on('click', function(){
+      var cause = $('#cause-input').val();
+      var mode = $('.mode-select').val();
+      if (!cause) {alert('请输入值！');}
+      else if (mode === null || mode === undefined) {alert('请选择失效模式！');}
+      else{$('.cause-list').append("<li><span class='text'>"+cause+"</span><div class='tools'><i class='fa fa-edit'></i><i class='fa fa-trash-o'></i></div></li>")};
+      $('#cause-input').val('');
+    })
+
+    $('.effect-btn').on('click', function(){
+      var effect = $('#effect-input').val();
+      var mode = $('.mode-select').val();
+      if (!effect) {alert('请输入值！');}
+      else if (mode === null || mode === undefined) {alert('请选择失效模式！');}
+      else{$('.effect-list').append("<li><span class='text'>"+effect+"</span><div class='tools'><i class='fa fa-edit'></i><i class='fa fa-trash-o'></i></div></li>")};
+      $('#effect-input').val('');
+    })
+
+
+    function mylist(_str){
+      var dataArray = [];
+      $(_str).each(function(){
+        var liarray = $(this).children();
+        dataArray.push($(liarray[0]).text())
+      });
+      return dataArray;
+    }
+
+    $('#save-btn').on('click', function(){
+      if (confirm('请核对数据是否正确, 否则该失效模式将不再显示')){
+        var mode = $('.mode-select').val();
+        var serverity = $('.s-select').val();
+        var causeArray = mylist('.cause-list li');
+        var effectAray = mylist('.effect-list li');
+        var faliure = {'mode': mode, 'serverity': serverity, 'cause': causeArray, 'effect': effectAray, 'node_tag': node_tag, 'node_id': node_id}
+        failure_modes.push(faliure);
+        $('.mode-select option:selected').remove();
+        $('.cause-list li').remove();
+        $('.effect-list li').remove();
+      }
+    })
+
+
+  </script>
+{%endblock%}
+

@@ -1,0 +1,25 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{%static 'bower_components/font-awesome/css/font-awesome.min.css'%}"/>
+    <link href="{%static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{%static 'bower_components/select2/dist/css/select2.min.css'%}">
+    <link rel="stylesheet" href="{%static 'dist/css/AdminLTE.min.css'%}">
+
+    {%block css%}{%endblock%}
+</head>
+<body>
+    {%block content%}{%endblock%}
+<script src="{%static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{%static 'bower_components/bootstrap/dist/js/bootstrap.min.js'%}"></script>
+<!-- AdminLTE App -->
+<script src="{%static 'dist/js/adminlte.min.js'%}"></script>
+<script src="{%static 'js/bootstrap-treeview.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/layer.js'%}"></script>
+{%block js%}{%endblock%}
+</body>
+</html>

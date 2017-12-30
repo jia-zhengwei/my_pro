@@ -1,0 +1,49 @@
+{%extends 'index.html'%}
+{% load staticfiles %}
+{%block menu%}
+<div class="row">
+    <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">用户权限</h3>
+                  <!-- /.user-block -->
+                  <div class="box-tools">
+                    <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Mark as read">
+                      <i class="fa fa-circle-o"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+                  <!-- /.box-tools -->
+                </div>
+                <div class="box-body box-profile">
+                    <div class="col-md-4">
+                        <label>
+                          <input type="radio" name="r3" class="flat-red" >
+                          Flat green skin radio
+                        </label>
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+            <!-- /.box-body -->
+                </div>
+
+        </div>
+</div>
+{%endblock%}
+{%block css%}
+<link rel="stylesheet" href="{%static 'plugins/iCheck/all.css'%}">
+{%endblock%}
+{%block js%}
+<script src="{%static 'plugins/iCheck/icheck.min.js'%}"></script>
+<script type="text/javascript">
+
+    $(function () {
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+          checkboxClass: 'icheckbox_flat-green',
+          radioClass   : 'iradio_flat-green'
+        })
+    }
+</script>
+{%endblock%}

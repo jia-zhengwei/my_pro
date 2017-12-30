@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<form role="form" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="process" name="process" value="{{process_id}}">
+				<div class="form-group">
+					 <label for="type">选择分类</label>
+                    <select class="selectpicker show-tick form-control" id="type" name="type">
+                        <option value="default">--请选择--</option>
+                          <option value="variation">工艺特性</option>
+                          <option value="product">产品特性</option>
+                          <option value="require">要求</option>
+
+                        <option value="mode">失效模式</option>
+
+                            <option value="cause">失效原因</option>
+                          <option value="effect">失效影响</option>
+                    </select>
+				</div>
+                <div class="form-group" id="reqSelect" style="display: none">
+                    <label for="content">选择要求(失效模式)</label>
+                    <select class="selectpicker show-tick form-control" id="content" name="content">
+                    </select>
+				</div>
+
+				<div class="form-group" >
+					 <label for="InputText">输入内容</label>
+                    <input type="text" class="form-control" id="InputText" />
+				</div>
+
+				<!--<button type="submit" class="btn btn-default">Submit</button>-->
+			</form>
+		</div>
+	</div>
+        <div class="row clearfix" style="padding-top: 50px;display: none" id="result">
+            <h5>
+				已有数据:
+			</h5>
+            <div class="col-md-12 column">
+			    <ul id="listShow">
+
+			    </ul>
+		    </div>
+        </div>
+</div>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-treeview.js"></script>
+    <script src="/static/js/bootstrap-filestyle.js"></script>
+    <script src="/static/js/csrf.js"></script>
+    <script type="text/javascript">
+
+//        $.ajaxSetup({data: {csrfmiddlewaretoken: '{{ csrf_token }}' }});
+
+        var pro_id = $('#process').val();
+        console.log(pro_id);
+
+        $('#type').change(function () {
+            var type = $(this).val();
+            if(type==='mode' || type === 'cause' || type === 'effect'){
+                $.getJSON("{%url 'pfmea:data_list'%}", {'type':type,'pro_id':pro_id}, function (data) {
+                    console.log(data['req'],data['modes']);
+                    $('#reqSelect').show();
+                    $("#listShow ").empty();
+                    $("#content").empty();
+                    data['req'].forEach(function (li, index) {
+                        $("#content").append("<option value='"+li['id']+"'>"+li['req']+"</option>")
+                    });
+                    $('#result').show();
+                    data['modes'].forEach(function (li, index) {
+                        $("#listShow").append("<li>"+li+"</li>")
+                    })
+                })
+            } else if(type === 'variation' || type === 'product' || type === 'require'){
+                $.getJSON("{%url 'pfmea:data_list'%}", {'type':type,'pro_id':pro_id}, function (data) {
+                    $("#listShow ").empty();
+                    $('#reqSelect').hide();
+                    $('#result').show();
+                    data['modes'].forEach(function (li, index) {
+                        $("#listShow").append("<li>"+li+"</li>")
+                    })
+                })
+
+            }
+        });
+
+
+        function submit() {
+            var treeData = null;
+            var text = $('#InputText').val();
+            var req = $('#content').val();
+            var type = $('#type').val();
+            $.ajax({
+                type:'POST',
+                async: false,//防止报错ConnectionAbortedError: [WinError 10053] 您的主机中的软件中止了一个已建立的连接
+                url:"{%url 'pfmea:treeData_add'%}",
+                data:JSON.stringify({'text': text, 'pro_id': pro_id, 'req': req, 'type':type}),
+                success:function (data) {
+                    alert(data['msg']);
+                    treeData = data['data'];
+                    parent.layer.closeAll();
+                },
+                error:function (data) {
+                    alert(data);
+                }
+             });
+            var info = {'text':text, 'treedata': treeData};
+            return info;
+        }
+
+
+
+    </script>
+</body>
+</html>

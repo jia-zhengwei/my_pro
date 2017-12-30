@@ -1,0 +1,39 @@
+{%extends 'base.html'%}
+{%block body%}
+<div class="container">
+
+<div class="row clearfix" style="display: table-cell;vertical-align: middle;">
+    <div class="col-md-3 col-xs-6 text-center" style="margin-top: 50px;">
+        <a href="" style="text-decoration:none;"><img src="/static/image/contacts_icon.png" class="img-rounded center-block">
+        <h4 style="color: white">用户管理</h4></a>
+    </div>
+    <div class="col-md-3 col-xs-6 text-center" style="margin-top: 50px;">
+        <a href="{%url 'pfmea:data_import'%}" style="text-decoration:none;"><img src="/static/image/icloud_drive_icon.png" class="img-rounded center-block">
+        <h4 style="color: white">导入数据</h4></a>
+    </div>
+    <div class="col-md-3 col-xs-6 text-center" style="margin-top: 50px;">
+        <a href="{%url 'pfmea:data_output'%}" style="text-decoration:none;"><img src="/static/image/numbers_icon.png" class="img-rounded center-block">
+        <h4 style="color: white">数据导出</h4></a>
+    </div>
+    <div class="col-md-3 col-xs-6 text-center" style="margin-top: 50px;">
+        <a href="{%url 'pfmea:data_update'%}" style="text-decoration:none;"><img src="/static/image/pages_icon.png" class="img-rounded center-block">
+        <h4 style="color: white">数据编辑</h4></a>
+    </div>
+    <div class="col-md-3 col-xs-6 text-center" style="margin-top: 50px;">
+        <img src="/static/image/keynote_icon.png" class="img-rounded center-block">
+        <h4 style="color: white">功能待定</h4>
+    </div>
+    <div class="col-md-3 col-xs-6 text-center" style="margin-top: 50px;">
+        <a href="{%url 'pfmea:import_record'%}" style="text-decoration:none;"><img src="/static/image/notes_icon.png" class="img-rounded center-block">
+        <h4 style="color: white">导入记录</h4></a>
+    </div>
+    <div class="col-md-3 col-xs-6 text-center" style="margin-top: 50px;">
+        <img src="/static/image/settings_icon.png" class="img-rounded center-block">
+        <h4 style="color: white">系统设置</h4>
+    </div>
+
+</div>
+
+
+</div>
+{%endblock%}
